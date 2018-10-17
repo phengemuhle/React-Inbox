@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'font-awesome/css/font-awesome.css';
 import './App.css';
+import Message from './Component/Message'
+import Message from './Component/Message'
+import Toolbar from './Component/Toolbar'
+
 
 class App extends Component {
   render() {
