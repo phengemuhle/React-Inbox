@@ -6,14 +6,19 @@ const MessageList = (props) => {
         return (
             <div id={message.id}>
                 <div
-                    className={`row message ${message.read ? 'read' : 'unread'} ${message.selected ? 'selected' : ''}`}>
+                    id={message.id} className={`row message ${message.read ? 'read' : 'unread'} ${message.selected ? "selected" : ''}`}>
                     <div className="col-xs-1">
                         <div className="row">
                             <div className="col-xs-2">
-                                <input type="checkbox" id={message.id} onChange={props.markChecked} checked={`checked ${message.selected ? "false" : "true"}`} />
+                                <input type="checkbox"
+                                    onChange={(e) => props.selectMessage(e)}
+
+                                    id={message.id}
+                                    checked={`${message.selected ? "true" : ''}`}
+                                />
                             </div>
                             <div className="col-xs-2">
-                                <i id={message.id} onClick={props.markStarred} className={`star fa ${message.starred ? 'fa-star-o' : 'fa-star'}`}></i>
+                                <i id={message.id} onClick={(e) => props.markStarred(e)} className={`star fa ${message.starred ? 'fa-star' : 'fa-star-o'}`}></i>
                             </div>
                         </div>
                     </div>
@@ -22,7 +27,7 @@ const MessageList = (props) => {
                         <span className="label label-warning">{message.labels[1]}</span>
                         <span className="label label-warning">{message.labels[2]}</span>
 
-                        <a href="#"
+                        <a
                         >{message.subject}</a>
                     </div>
                 </div>
@@ -31,7 +36,7 @@ const MessageList = (props) => {
                         {message.body}
                     </div>
                 </div>
-            </div>
+            </div >
         )
     })
 

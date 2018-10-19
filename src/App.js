@@ -15,32 +15,22 @@ class App extends Component {
       messages: [],
       unreadMessage: 0,
       composeMessage: true,
+      isSelected: [],
       markAsRead: false,
       body: [],
       subject: [],
     }
   }
-  markRead = () => {
-    var readOrNot = this.state.markAsRead
-    if (readOrNot === true) {
-      readOrNot = false
-    } else {
-      readOrNot = true
-    }
-    this.setState({
-      markAsRead: readOrNot,
-    })
-  }
 
   async componentDidMount() {
     let result = await fetch("http://localhost:8082/api/messages");
     let firstdata = await result.json();
-    let data = firstdata.map(item => {
-      item.selected = false
-      return item
-    })
+    // let data = firstdata.map(item => {
+    //   return item
+    // })
+    // console.log(data)
     this.setState({
-      messages: [...data],
+      messages: [...firstdata],
     })
     console.log(this.state.messages)
   }
@@ -57,54 +47,13 @@ class App extends Component {
     }
   }
 
-
-  // patch = async (id, command, attribute) => {
-  // var patch = {
-  //   messageIds: id,
-  //   command: command,
-  //   attribute,
-  // }
-  //   const response = await fetch('http://localhost:8082/api/messages', {
-  //     method: 'PATCH',
-  //     body: JSON.stringify(patch),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json',
-  //     }
-  //   })
-  //   const posted = await response.json()
-  //   this.setState({
-  //     messages: posted
-  //   })
-  // }
-  // markStarred = (event) => {  
-  //   let attribute = { star: true }
-  //   this.patch(event.target.id, 'star', attribute)
-  // }
-  markStarred = async (event) => {
+  patch = async (id, command, attribute, value) => {
+    console.log(id, command, attribute, value)
     var patch = {
-      messageIds: [event.target.id],
-      command: 'star',
-      star: true,
-    }
-    const response = await fetch('http://localhost:8082/api/messages', {
-      method: 'PATCH',
-      body: JSON.stringify(patch),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-    const posted = await response.json()
-    this.setState({
-      messages: posted
-    })
-  }
-  markChecked = async (event) => {
-    var patch = {
-      messageIds: [event.target.id],
-      command: 'select',
-      selected: true,
+      messageIds: [id],
+      command: command,
+      [attribute]:
+        value
     }
     const response = await fetch('http://localhost:8082/api/messages', {
       method: 'PATCH',
@@ -120,62 +69,43 @@ class App extends Component {
     })
   }
 
-  addLabel = async (event) => {
-    var patch = {
-      messageIds: [6],
-      command: 'addLabel',
-      label: event.target.value,
-    }
-    const response = await fetch('http://localhost:8082/api/messages', {
-      method: 'PATCH',
-      body: JSON.stringify(patch),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-    const posted = await response.json()
-    this.setState({
-      messages: posted
-    })
+  markStarred = (event) => {
+    this.patch([event.target.id], 'star', "star", true)
   }
 
-  removeLabel = async (event) => {
-    var patch = {
-      messageIds: [6],
-      command: 'removeLabel',
-      label: event.target.value,
-    }
-    const response = await fetch('http://localhost:8082/api/messages', {
-      method: 'PATCH',
-      body: JSON.stringify(patch),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-    const posted = await response.json()
-    this.setState({
-      messages: posted
-    })
+  selectMessage = (event) => {
+    this.patch([event.target.id], "select", 'selected')
+  }
+  markChecked = (event) => {
+    this.patch([event.target.id], "starred", 'starred', true)
+  }
+  addLabel = (event) => {
+    this.patch([event.target.id], 'addLabel', "label", event.target.value)
+  }
+  removeLabel = (event) => {
+    this.patch([event.target.id], 'removeLabel', "label", event.target.value)
+  }
+  itemDelete = (event) => {
+    this.patch([event.target.id], 'delete')
   }
 
-  itemDelete = async (event) => {
-    var patch = {
-      messageIds: [event.target.id],
-      command: 'delete',
-    }
-    const response = await fetch('http://localhost:8082/api/messages', {
-      method: 'PATCH',
-      body: JSON.stringify(patch),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-    const posted = await response.json()
+  subjectOnChange = (e) => {
+    console.log(e.target.value)
+    var subject = e.target.value
     this.setState({
-      messages: posted
+      subject: subject
+    })
+  }
+  bodyOnChange = (e) => {
+    console.log(e.target.value)
+    var body = e.target.value
+    this.setState({
+      body: body
+    })
+  }
+  selectedId = (event) => {
+    this.setState({
+      isSelected: event.target.id
     })
   }
 
@@ -207,55 +137,11 @@ class App extends Component {
     return (
       <>
         <Toolbar composeMessage={this.state.composeMessage} itemDelete={this.itemDelete} addLabel={this.addLabel} removeLabel={this.removeLabel} toggleMessage={this.toggleMessage} count={this.state.unreadMessage} />
-        <Message composeMessage={this.state.composeMessage} body={this.state.body} subject={this.state.subject} submitMessage={this.submitMessage} />
-        <MessageList messages={this.state.messages} markChecked={this.markChecked} markStarred={this.markStarred} />
+        <Message composeMessage={this.state.composeMessage} bodyOnChange={this.bodyOnChange} subjectOnChange={this.subjectOnChange} submitMessage={this.submitMessage} />
+        <MessageList messages={this.state.messages} selectMessage={this.selectMessage} selectedId={this.selectedId} markStarred={this.markStarred} />
       </>
     )
   }
 }
 
 export default App;
-
-
-// patch = async (id, command, attribute) => {
-//   var patch = {
-//     messageIds: id,
-//     command: command,
-//     attribute,
-//   }
-//   const response = await fetch('http://localhost:8082/api/messages', {
-//     method: 'PATCH',
-//     body: JSON.stringify(patch),
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Accept': 'application/json',
-//     }
-//   })
-//   const posted = await response.json()
-//   this.setState({
-//     messages: posted
-//   })
-// }
-
-
-// var object = ({
-//   firstName: FirstName,
-//   lastName: LastName,
-//   role: role
-// })
-// fetch('https://galvanize-student-apis.herokuapp.com/gpersonnel/users', {
-//   method: 'POST',
-//   headers: { 'Content-Type': 'application/json; charset=utf-8' },
-//   body: JSON.stringify(object)
-
-// })
-//   .then(response => response.json())
-//   .then((response) => {
-//     para.setAttribute('class', 'save-status')
-//     var save = document.querySelector('.save-status')
-//     para.innerText = response.message
-//     save.style.opacity = '1'
-//     setTimeout(function () {
-//       save.style.opacity = '0'
-//     }, 2000)
-//   })
