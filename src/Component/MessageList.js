@@ -1,27 +1,46 @@
 import React from 'react'
 
-const messageList = (props) => {
+const MessageList = (props) => {
 
-    return (
-        <div class="row message read">
-            <div class="col-xs-1">
-                <div class="row">
-                    <div class="col-xs-2">
-                        <input type="checkbox" />
+    var messages = props.messages.map(message => {
+        return (
+            <div id={message.id}>
+                <div
+                    className={`row message ${message.read ? 'read' : 'unread'} ${message.selected ? 'selected' : ''}`}>
+                    <div className="col-xs-1">
+                        <div className="row">
+                            <div className="col-xs-2">
+                                <input type="checkbox" id={message.id} onChange={props.markChecked} checked={`checked ${message.selected ? "false" : "true"}`} />
+                            </div>
+                            <div className="col-xs-2">
+                                <i id={message.id} onClick={props.markStarred} className={`star fa ${message.starred ? 'fa-star-o' : 'fa-star'}`}></i>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-xs-2">
-                        <i class="star fa fa-star"></i>
+                    <div className="col-xs-11">
+                        <span className="label label-warning">{message.labels[0]}</span>
+                        <span className="label label-warning">{message.labels[1]}</span>
+                        <span className="label label-warning">{message.labels[2]}</span>
+
+                        <a href="#"
+                        >{message.subject}</a>
+                    </div>
+                </div>
+                <div className="row message-body hidden">
+                    <div className="col-xs-11 col-xs-offset-1">
+                        {message.body}
                     </div>
                 </div>
             </div>
-            <div class="col-xs-11">
-                <span class="label label-warning">dev</span>
-                <span class="label label-warning">gschool</span>
-                <a href="#">
-                    Here is some message text that has a bunch of stuff
-                 </a>
+        )
+    })
+
+    return (
+        <>
+            <div className='container messageListContainer'>
+                {messages}
             </div>
-        </div>
+        </>
     )
 }
-export default messageList
+export default MessageList
