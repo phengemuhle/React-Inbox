@@ -1,13 +1,20 @@
 import React from 'react'
 
 const toolbar = (props) => {
+    let count = props.messages.filter(item => item.read === false)
+    let plurl = true
+    let select = props.messages.filter(item => item.read === false)
+    if (select.length === 1) {
+        plurl = false
+    }
 
+    console.log(props.unRead)
     return (
         <div className="row toolbar">
             <div className="col-md-12">
                 <p className="pull-right">
-                    <span className="badge badge">{props.count}</span>
-                    unread messages
+                    <span className="badge badge">{count.length}</span>
+                    {`Unread message${plurl ? "s" : ""}`}
                 </p>
 
                 <a onClick={props.toggleMessage} className="btn btn-danger">

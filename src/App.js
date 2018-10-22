@@ -13,7 +13,6 @@ class App extends Component {
     super()
     this.state = {
       messages: [],
-      unreadMessage: 0,
       composeMessage: true,
       isSelected: [],
       markAsRead: false,
@@ -74,6 +73,10 @@ class App extends Component {
   markChecked = (event) => {
     this.patch([event.target.id], "starred", 'starred', true)
   }
+  showBody = (event) => {
+    this.patch([event.target.id], 'read', 'read', true)
+  }
+
   addLabel = (event) => {
     this.state.messages.map(item => {
       if (item.selected === true) {
@@ -91,8 +94,12 @@ class App extends Component {
     })
   }
 
-  itemDelete = (event) => {
-    this.patch([event.target.id], 'delete')
+  itemDelete = () => {
+    this.state.messages.map(item => {
+      if (item.selected) {
+        return this.patch([item.id], 'delete')
+      }
+    })
   }
 
   subjectOnChange = (e) => {
@@ -119,20 +126,19 @@ class App extends Component {
     let selected = this.state.messages.filter(item => item.selected === true)
     selected.map(item => this.patch(item.id, 'read', 'read', true))
   }
-  deselectAll = (event) => {
+  deselectAll = () => {
     let messages = this.state.messages
-    let selectedId = this.state.messages.filter(item => item.selected)
-    let notSelected = this.state.messages.filter(item => !item.selected)
-    this.state.messages.map(item => {
-      if (item.selected) {
+    let selected = this.state.messages.filter(item => item.selected === true)
+    let notSelected = this.state.messages.filter(item => item.selected === false)
 
-      } (!item.selected) {
-        return this.patch([item.id], 'select', 'selected', true)
-      }
-    })
+    if (selected.length === messages.length) {
+      selected.map(item => { this.patch([item.id], 'select', 'selected') })
+
+    } else {
+      notSelected.map(item => { this.patch([item.id], 'select', 'selected', true) })
+
+    }
   }
-
-
 
   submitMessage = async (e) => {
     var newMessage = {
@@ -160,9 +166,9 @@ class App extends Component {
   render() {
     return (
       <>
-        <Toolbar composeMessage={this.state.composeMessage} deselectAll={this.deselectAll} markUnread={this.markUnread} markRead={this.markRead} itemDelete={this.itemDelete} addLabel={this.addLabel} removeLabel={this.removeLabel} toggleMessage={this.toggleMessage} count={this.state.unreadMessage} />
+        <Toolbar composeMessage={this.state.composeMessage} deselectAll={this.deselectAll} markUnread={this.markUnread} markRead={this.markRead} itemDelete={this.itemDelete} addLabel={this.addLabel} removeLabel={this.removeLabel} toggleMessage={this.toggleMessage} messages={this.state.messages} />
         <Message composeMessage={this.state.composeMessage} bodyOnChange={this.bodyOnChange} subjectOnChange={this.subjectOnChange} submitMessage={this.submitMessage} />
-        <MessageList messages={this.state.messages} selectMessage={this.selectMessage} selectedId={this.selectedId} markStarred={this.markStarred} />
+        <MessageList messages={this.state.messages} selectMessage={this.selectMessage} selectedId={this.selectedId} markStarred={this.markStarred} showBody={this.showBody} />
       </>
     )
   }

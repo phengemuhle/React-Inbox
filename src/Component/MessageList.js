@@ -21,7 +21,7 @@ const MessageList = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-xs-11">
+                    <div id={message.id} onClick={(e) => props.showBody(e)} className="col-xs-11">
                         <span className="label label-warning">{message.labels[0]}</span>
                         <span className="label label-warning">{message.labels[1]}</span>
                         <span className="label label-warning">{message.labels[2]}</span>
@@ -30,7 +30,7 @@ const MessageList = (props) => {
                         >{message.subject}</a>
                     </div>
                 </div>
-                <div className="row message-body hidden">
+                <div className="row message-body hidden" >
                     <div className="col-xs-11 col-xs-offset-1">
                         {message.body}
                     </div>
