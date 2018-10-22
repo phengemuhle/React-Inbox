@@ -8,6 +8,16 @@ const toolbar = (props) => {
         plurl = false
     }
 
+    var countSelect = false
+    var noneSelected = false
+    var allSelectedMath = props.messages.length
+    var someSelectedMath = props.messages.filter(item => item.selected)
+    if (allSelectedMath === someSelectedMath.length) {
+        countSelect = !countSelect
+    } else if (someSelectedMath.length === 0) {
+        noneSelected = !noneSelected
+    }
+
     console.log(props.unRead)
     return (
         <div className="row toolbar">
@@ -21,7 +31,7 @@ const toolbar = (props) => {
                     <i className={`fa  ${props.composeMessage ? " fa-plus" : "fa-minus"}`}></i>
                 </a>
                 <button onClick={props.deselectAll} className="btn btn-default">
-                    <i className="fa fa-minus-square-o"></i>
+                    <i className={`fa ${countSelect ? "fa-check-square-o" : noneSelected ? 'fa-square-o' : "fa-minus-square-o"}`}></i>
                 </button>
 
                 <button onClick={props.markRead} className="btn btn-default">Mark As Read</button>
@@ -46,7 +56,7 @@ const toolbar = (props) => {
                     <i className="fa fa-trash-o"></i>
                 </button>
             </div>
-        </div>
+        </div >
     )
 }
 export default toolbar

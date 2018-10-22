@@ -65,16 +65,17 @@ class App extends Component {
   }
 
   markStarred = (event) => {
-    this.patch([event.target.id], 'star', "star", true)
+    this.patch([event], 'star', "star", true)
   }
   selectMessage = (event) => {
-    this.patch([event.target.id], "select", 'selected')
+    this.patch([event], "select", 'selected')
   }
   markChecked = (event) => {
-    this.patch([event.target.id], "starred", 'starred', true)
+    this.patch([event], "starred", 'starred', true)
   }
   showBody = (event) => {
-    this.patch([event.target.id], 'read', 'read', true)
+    this.patch([event], 'read', 'read', true)
+    this.patch([event], 'show', 'show')
   }
 
   addLabel = (event) => {
