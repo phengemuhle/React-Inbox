@@ -13,23 +13,22 @@ const toolbar = (props) => {
                 <a onClick={props.toggleMessage} className="btn btn-danger">
                     <i className={`fa  ${props.composeMessage ? " fa-plus" : "fa-minus"}`}></i>
                 </a>
-
-                <button className="btn btn-default">
+                <button onClick={props.deselectAll} className="btn btn-default">
                     <i className="fa fa-minus-square-o"></i>
                 </button>
 
-                <button className="btn btn-default">Mark As Read</button>
+                <button onClick={props.markRead} className="btn btn-default">Mark As Read</button>
 
-                <button className="btn btn-default">Mark As Unread</button>
+                <button onClick={props.markUnread} className="btn btn-default">Mark As Unread</button>
 
-                <select onChange={props.addLabel} className="form-control label-select">
+                <select onChange={(e) => { props.addLabel(e); e.target.selectedIndex = 0 }} className="form-control label-select">
                     <option selected disabled >Apply label</option>
                     <option value="dev">dev</option>
                     <option value="personal">personal</option>
                     <option value="gschool">gschool</option>
                 </select>
 
-                <select onChange={props.removeLabel} className="form-control label-select">
+                <select onChange={(e) => { props.removeLabel(e); e.target.selectedIndex = 0 }} className="form-control label-select">
                     <option selected disabled >Remove label</option>
                     <option value="dev">dev</option>
                     <option value="personal">personal</option>

@@ -12,9 +12,8 @@ const MessageList = (props) => {
                             <div className="col-xs-2">
                                 <input type="checkbox"
                                     onChange={(e) => props.selectMessage(e)}
-
                                     id={message.id}
-                                    checked={`${message.selected ? "true" : ''}`}
+                                    checked={`${message.selected ? "defaultChecked" : ''}`}
                                 />
                             </div>
                             <div className="col-xs-2">
