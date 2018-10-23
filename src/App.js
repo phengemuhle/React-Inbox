@@ -22,12 +22,11 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    let result = await fetch("http://localhost:8082/api/messages");
+    let result = await fetch('http://localhost:8082/api/messages');
     let firstdata = await result.json();
     this.setState({
       messages: [...firstdata],
     })
-    console.log(this.state.messages)
   }
 
   toggleMessage = () => {
@@ -43,7 +42,6 @@ class App extends Component {
   }
 
   patch = async (id, command, attribute, value) => {
-    console.log(id, command, attribute, value)
     var patch = {
       messageIds: [id],
       command: command,
@@ -65,13 +63,13 @@ class App extends Component {
   }
 
   markStarred = (event) => {
-    this.patch([event], 'star', "star", true)
+    this.patch([event], 'star', 'star', true)
   }
   selectMessage = (event) => {
-    this.patch([event], "select", 'selected')
+    this.patch([event], 'select', 'selected')
   }
   markChecked = (event) => {
-    this.patch([event], "starred", 'starred', true)
+    this.patch([event], 'starred', 'starred', true)
   }
   showBody = (event) => {
     this.patch([event], 'read', 'read', true)
@@ -81,16 +79,15 @@ class App extends Component {
   addLabel = (event) => {
     this.state.messages.map(item => {
       if (item.selected === true) {
-        return this.patch([item.id], 'addLabel', "label", event.target.value)
+        return this.patch([item.id], 'addLabel', 'label', event.target.value)
       }
     })
-    console.log(event.target.id)
   }
 
   removeLabel = (event) => {
     this.state.messages.map(item => {
       if (item.selected === true) {
-        return this.patch([item.id], 'removeLabel', "label", event.target.value)
+        return this.patch([item.id], 'removeLabel', 'label', event.target.value)
       }
     })
   }
@@ -104,14 +101,12 @@ class App extends Component {
   }
 
   subjectOnChange = (e) => {
-    console.log(e.target.value)
     var subject = e.target.value
     this.setState({
       subject: subject
     })
   }
   bodyOnChange = (e) => {
-    console.log(e.target.value)
     var body = e.target.value
     this.setState({
       body: body
@@ -131,11 +126,12 @@ class App extends Component {
     let messages = this.state.messages
     let selected = this.state.messages.filter(item => item.selected === true)
     let notSelected = this.state.messages.filter(item => item.selected === false)
-
+    console.log(messages)
     if (selected.length === messages.length) {
-      selected.map(item => { this.patch([item.id], 'select', 'selected') })
+      selected.map(item => { this.patch([item.id], 'select', 'selected', false) })
 
     } else {
+      console.log(notSelected)
       notSelected.map(item => { this.patch([item.id], 'select', 'selected', true) })
 
     }
@@ -145,6 +141,8 @@ class App extends Component {
     var newMessage = {
       subject: [this.state.subject],
       read: false,
+      selected: false,
+      show: false,
       labels: [],
       body: [this.state.body],
       id: [this.state.messages.length],
@@ -156,12 +154,7 @@ class App extends Component {
         'Content-Type': 'application/json',
         'Accept': 'application/json; charset=utf - 8'
       }
-    }).then(response => response.json())
-      .then((response) => {
-        this.setState({
-          messages: [...this.state.messages, response]
-        })
-      })
+    })
   }
 
   render() {
