@@ -22,7 +22,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    let result = await fetch('http://localhost:8082/api/messages');
+    let result = await fetch('https://hengemuhle-collective.herokuapp.com/api/messages');
     let firstdata = await result.json();
     this.setState({
       messages: [...firstdata],
@@ -48,7 +48,7 @@ class App extends Component {
       [attribute]:
         value
     }
-    const response = await fetch('http://localhost:8082/api/messages', {
+    const response = await fetch('https://hengemuhle-collective.herokuapp.com/api/messages', {
       method: 'PATCH',
       body: JSON.stringify(patch),
       headers: {
@@ -126,14 +126,10 @@ class App extends Component {
     let messages = this.state.messages
     let selected = this.state.messages.filter(item => item.selected === true)
     let notSelected = this.state.messages.filter(item => item.selected === false)
-    console.log(messages)
     if (selected.length === messages.length) {
       selected.map(item => { this.patch([item.id], 'select', 'selected', false) })
-
     } else {
-      console.log(notSelected)
       notSelected.map(item => { this.patch([item.id], 'select', 'selected', true) })
-
     }
   }
 
@@ -147,7 +143,7 @@ class App extends Component {
       body: [this.state.body],
       id: [this.state.messages.length],
     }
-    await fetch('http://localhost:8082/api/messages', {
+    await fetch('https://hengemuhle-collective.herokuapp.com/api/messages', {
       method: 'POST',
       body: JSON.stringify(newMessage),
       headers: {
