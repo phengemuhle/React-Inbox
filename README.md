@@ -16,7 +16,7 @@ Depolyed to Heroku
 
 ## Authors
 
-* **Phillip Hengemuhle** - *Initial work* - [Inbox Front-End](https://github.com/phengemuhle/movies-fullstack-front)
+* **Phillip Hengemuhle** - *Initial work* - [Inbox Front-End](https://github.com/phengemuhle/React-Inbox)
 
 ## Deployed Links
 [Inbox](https://hengemuhle-react-inbox.herokuapp.com/)
