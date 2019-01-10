@@ -1,6 +1,6 @@
 # React Inbox
 
-This project was built to show mastery of front end programing. A user can view, edit, add, or remove a movie. As well as adding or deleting a review of the listed movies. 
+This project was built to show mastery of front end programing. A user can view, edit, add, or remove a messages. As well as adding or deleting labels and staring important email. 
 
 ## Getting Started
 
